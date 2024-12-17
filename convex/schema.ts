@@ -10,5 +10,36 @@ export default defineSchema({
         proSince: v.optional(v.number()),
         lemonSquizyCustomerId: v.optional(v.string()),
         lemonSquizyOrderId: v.optional(v.string())
-    }).index("by_user_id", ["userId"])
+    }).index("by_user_id", ["userId"]),
+
+    codeExecution: defineTable({
+        userId: v.string(),
+        language: v.string(),
+        code : v.string(),
+        output: v.optional(v.string()),
+        error: v.optional(v.string())
+    }).index("by_user_id", ["userId"]),
+
+    snippets: defineTable({
+        userId: v.string(),
+        title: v.string(),
+        language: v.string(),
+        code : v.string(),
+        userName: v.string(), //store username 
+    }).index("by_user_id", ["userId"]),
+
+    snippetCommet: defineTable({
+        snippetId: v.id("snippets"),
+        userId: v.string(),
+        userName: v.string(),
+        content: v.string(), //this will store html content
+    }).index("by_snippet_id", ["snippetId"]),
+    
+    stars: defineTable({
+        userId: v.id("users"),
+        snippetId: v.id("snippets"), 
+    })
+        .index("by_user_id", ["userId"])
+        .index("by_snippet_id", ["snippetId"])
+        .index("by_user_id_and_snippet_id", ["userId", "snippetId"]),
 });
